@@ -50,7 +50,7 @@ MonoBehaviour:
   - {fileID: 114580989189733782}
   - {fileID: 8926484042661614528}
   - {fileID: 114596491906001080}
-  m_UIPosition: {x: 719, y: 1350}
+  m_UIPosition: {x: 719, y: 1555}
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots:
@@ -133,7 +133,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"obj":{"fileID":2800000,"guid":"49cb5aa34272b034d8b754c65d9cdbfa","type":3}}'
+      m_SerializableObject: '{"obj":{"fileID":2800000,"guid":"4031a5f91efc0a44fa776a27782a7eb9","type":3}}'
     m_Space: 2147483647
   m_Property:
     name: mainTexture
@@ -227,7 +227,7 @@ MonoBehaviour:
     x: 708
     y: -190
     width: 423
-    height: 2105
+    height: 2310
 --- !u!114 &114350483966674976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1483,7 +1483,7 @@ VisualEffectResource:
         - m_ExpressionIndex: 13
           m_Value: {fileID: 11700000, guid: 08937e3134903c5488be506a2dac71e9, type: 2}
         - m_ExpressionIndex: 21
-          m_Value: {fileID: 2800000, guid: 49cb5aa34272b034d8b754c65d9cdbfa, type: 3}
+          m_Value: {fileID: 2800000, guid: 4031a5f91efc0a44fa776a27782a7eb9, type: 3}
       m_Bool:
         m_Array: []
     m_ExposedExpressions: []
