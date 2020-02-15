@@ -92,6 +92,64 @@ public class Planet : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Export the planet mesh for SU2
+    /// </summary>
+    public void ExportPlanetMesh()
+    {
+        int totalLinesForObjFile = 0;
+        int totalTrianglIndecies = 0;
+        foreach (MeshFilter mf in meshFilters)
+        {
+            totalLinesForObjFile += mf.sharedMesh.vertices.Length;
+            totalLinesForObjFile += mf.sharedMesh.triangles.Length;
+            //
+            totalTrianglIndecies += mf.sharedMesh.triangles.Length;
+        }
+
+        string[] meshInStrArray = new string[totalLinesForObjFile];
+        string[] triangleArr = new string[totalTrianglIndecies];
+        int i = 0;
+        foreach (MeshFilter mf in meshFilters)
+        {
+            foreach (Vector3 vertex in mf.sharedMesh.vertices)
+            {
+                meshInStrArray[i] = "v " + vertex.x.ToString("R") + " " + vertex.y.ToString("R") + " " + vertex.z.ToString("R");
+                i++;  
+            }
+            
+        }
+        int multiplier = 0; // To take into account the separation of the mesh into mesh filters. This upscales the indicies of the triangle arrays for later meshfilters
+        foreach (MeshFilter mf in meshFilters)
+        {
+            for(int j= 2; j < mf.sharedMesh.triangles.Length; j+=3)
+            {
+                meshInStrArray[i] = "f " + (mf.sharedMesh.triangles[j-2]+ multiplier*3).ToString() + " " + (mf.sharedMesh.triangles[j-1] + multiplier * 3).ToString() + " " + (mf.sharedMesh.triangles[j] + multiplier * 3).ToString();
+                i++;
+                bool jisOdd = j % 2 != 0;
+                if (jisOdd)
+                {
+                    //multiplier++;
+                }
+            }
+
+        }
+        System.IO.File.WriteAllLines(@".\Exports\testingMeshExport.obj", meshInStrArray);
+        int k = 0;
+        foreach (MeshFilter mf in meshFilters)
+        {
+            string kthStr = "";
+            for (int j = 0; j < mf.sharedMesh.triangles.Length; j ++)
+            {
+                kthStr = kthStr + mf.sharedMesh.triangles[j].ToString() + " ";
+            }
+            triangleArr[k] = kthStr;
+            k++;
+
+        }
+        //System.IO.File.WriteAllLines(@"C:\Users\Hong Guo Group\Documents\testingTrianglesMeshExport.txt", triangleArr);
+    }
+
     // Set the colour
     void GenerateColours()
     {
