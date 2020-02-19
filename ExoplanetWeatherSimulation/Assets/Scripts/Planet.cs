@@ -92,6 +92,26 @@ public class Planet : MonoBehaviour
         }
     }
 
+    /*public static Mesh BuildMeshFromFilters( string name, params UnityEngine.Mesh[] baseMeshs)
+    {
+        LinkedList<Facet> facets = new LinkedList<Facet>();
+
+        
+        foreach (var mesh in baseMeshs)
+        {
+            Vector3 normal = (mesh.normals[mesh.triangles[i]] +
+                                     mesh.normals[mesh.triangles[i + 1]] +
+                                     mesh.normals[mesh.triangles[i + 2]]) / 3.0f;
+            var oneMesh = mesh.Mesh;
+            for (int i = 0; i < mesh.triangles.Length; i += 3)
+            {
+                Vector3 v1 = mesh.vertices[mesh.triangles[i]] + container.Translation;
+                //Vertex v2 = 
+            }
+        }
+        return new Mesh(name, facets);
+    }*/
+
     /// <summary>
     /// Export the planet mesh for SU2
     /// </summary>
@@ -115,27 +135,51 @@ public class Planet : MonoBehaviour
             foreach (Vector3 vertex in mf.sharedMesh.vertices)
             {
                 meshInStrArray[i] = "v " + vertex.x.ToString("R") + " " + vertex.y.ToString("R") + " " + vertex.z.ToString("R");
-                i++;  
-            }
-            
-        }
-        int multiplier = 0; // To take into account the separation of the mesh into mesh filters. This upscales the indicies of the triangle arrays for later meshfilters
-        foreach (MeshFilter mf in meshFilters)
-        {
-            for(int j= 2; j < mf.sharedMesh.triangles.Length; j+=3)
-            {
-                meshInStrArray[i] = "f " + (mf.sharedMesh.triangles[j-2]+ multiplier*3).ToString() + " " + (mf.sharedMesh.triangles[j-1] + multiplier * 3).ToString() + " " + (mf.sharedMesh.triangles[j] + multiplier * 3).ToString();
                 i++;
-                bool jisOdd = j % 2 != 0;
-                if (jisOdd)
-                {
-                    //multiplier++;
-                }
             }
 
         }
+        int resolutionMultiplier = 0; // To take into account the separation of the mesh into mesh filters. This upscales the indicies of the triangle arrays for later meshfilters
+        foreach (MeshFilter mf in meshFilters)
+        {
+            for (int j = 2; j < mf.sharedMesh.triangles.Length; j += 3)
+            {
+                meshInStrArray[i] = "f " + (mf.sharedMesh.triangles[j - 2] + 1+ resolutionMultiplier).ToString() + " " + (mf.sharedMesh.triangles[j - 1] + 1+ resolutionMultiplier).ToString() + " " + (mf.sharedMesh.triangles[j] + 1+ resolutionMultiplier).ToString();
+                i++;
+            }
+            resolutionMultiplier += mf.sharedMesh.vertices.Length;
+
+        }
         System.IO.File.WriteAllLines(@".\Exports\testingMeshExport.obj", meshInStrArray);
+    }
+
+        /// <summary>
+        /// Export the planet mesh for SU2
+        /// </summary>
+        public void ExportPlanetMeshin6()
+    {
         int k = 0;
+        foreach (MeshFilter mf in meshFilters)
+        {
+                
+            int totalLinesForObjFile = mf.sharedMesh.vertices.Length + mf.sharedMesh.triangles.Length;
+            string[] meshInStrArray = new string[totalLinesForObjFile];
+            int i = 0;
+            foreach (Vector3 vertex in mf.sharedMesh.vertices)
+            {
+                meshInStrArray[i] = "v " + vertex.x.ToString("R") + " " + vertex.y.ToString("R") + " " + vertex.z.ToString("R");
+                i++;
+            }
+            for (int j = 2; j < mf.sharedMesh.triangles.Length; j += 3)
+            {
+                meshInStrArray[i] = "f " + (mf.sharedMesh.triangles[j - 2]+1).ToString() + " " + (mf.sharedMesh.triangles[j - 1]+1).ToString() + " " + (mf.sharedMesh.triangles[j]+1).ToString();
+                i++;
+            }
+            System.IO.File.WriteAllLines( string.Format(@".\Exports\testingMeshExportFaceNumber{0}.obj",k.ToString()),  meshInStrArray);
+            k++;
+
+        }
+        /*int k = 0;
         foreach (MeshFilter mf in meshFilters)
         {
             string kthStr = "";
@@ -147,7 +191,8 @@ public class Planet : MonoBehaviour
             k++;
 
         }
-        //System.IO.File.WriteAllLines(@"C:\Users\Hong Guo Group\Documents\testingTrianglesMeshExport.txt", triangleArr);
+        System.IO.File.WriteAllLines(@"C:\Users\Hong Guo Group\Documents\testingTrianglesMeshExport.txt", triangleArr);
+        */
     }
 
     // Set the colour
