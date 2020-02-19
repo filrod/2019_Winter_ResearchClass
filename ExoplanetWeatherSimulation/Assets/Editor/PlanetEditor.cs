@@ -28,6 +28,13 @@ public class PlanetEditor : Editor
             planet.GeneratePlanet();
         }
 
+        // Export the mesh for SU2!
+        if (GUILayout.Button("Export Planet Mesh"))
+        {
+            Debug.Log("Exported");
+            planet.ExportPlanetMesh();
+        }
+
         // Pass the toggle bool by reference to allow it to update the bool referenced and not the copied val
         DrawSettingsEditor(planet.shapeSettings, planet.OnShapeSettingsUpdated, ref planet.shapeSettingsCustomMenuFoldout, ref shapeEditor);
         DrawSettingsEditor(planet.colourSettings, planet.OnColourSettingsUpdated, ref planet.colourSettingsCustomMenuFoldout, ref colourEditor);
